@@ -6,9 +6,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
 
-const Customers = () => {
-    const [customerDetails, setCustomerDetails] = useState(<></>);
-    const [customers, setCustomers] = useState([]);
+const Employees = () => {
+    const [employeeDetails, setEmployeeDetails] = useState(<></>);
+    const [employees, setEmployees] = useState([]);
+    const [users, setUsers] = useState([]);
+    const [userroles, setUserroles] = useState([]);
+    const [roles, setRoles] = useState([]);
     const [displayDetails, setDisplayDetails] = useState("none");
     const name = React.useRef(null);
     const phone = React.useRef(null);
@@ -21,7 +24,7 @@ const Customers = () => {
 
     useEffect(() => {
 
-    }, [customerDetails, displayDetails]);
+    }, [employeeDetails, displayDetails]);
 
 
     function handleAdd() {
@@ -33,22 +36,18 @@ const Customers = () => {
                                 <td><input type="text" id="name" name="name" class="formInput" placeholder="Name" required ref={name}></input></td>
                             </tr>
                             <tr>
-                                <td className='formTd'>Phone</td>
+                                <td className='formTd'>Password</td>
                                 <td><input type="text" id="phone" name="phone" class="formInput" placeholder="Phone Number" required ref={phone}></input></td>
                             </tr>
                             <tr>
-                                <td className='formTd'>Email</td>
+                                <td className='formTd'>Role</td>
                                 <td><input type="text" id="email" name="email" class="formInput" placeholder="Email" required ref={email}></input></td>
                             </tr>
-                            <tr>
-                                <td className='formTd'>Address</td>
-                                <td><input type="text" id="price" name="price" class="formInput" placeholder="Price" required ref={address}></input></td>
-                            </tr>
                         </table>
-                        <input type="submit" class="submitButton" name="submitButton" value="Add Customer" onClick={handleAddData}/>
+                        <input type="submit" class="submitButton" name="submitButton" value="Add Employee" onClick={handleAddData}/>
                         </form>;
         setDisplayDetails("block");
-        setCustomerDetails(details);
+        setEmployeeDetails(details);
     }
 
     function handleAddData(event) {
@@ -65,7 +64,7 @@ const Customers = () => {
         }
         console.log();
         console.log(name.current.value);
-        postData("customers", postCustData).then(data => {
+        postData("employees", postCustData).then(data => {
             console.log(data)
         });
         // console.log(event.target.name.value);
@@ -80,33 +79,50 @@ const Customers = () => {
     }
 
     function handleGetData() {
-        getData("customers").then(data => {
-            setCustomers(data);
+        // let users = [];
+        // let userroles = [];
+        // let roles = [];
+        getData("users").then(data => setUsers(data));
+        getData("userroles").then(data => setUserroles(data));
+        getData("roles").then(data => setRoles(data));
+
+        console.log(users);
+        console.log(userroles);
+        console.log(roles);
+        const finalData = users.map(item => {
+            let temp = {};
+            temp["user_id"] = item.user_id;
+            temp["user_name"] = item.username;
+            temp["password"] = item.password;
+            temp["role"] = roles.filter(k => k.role_id == userroles.filter(i => i.user_id == item.user_id)[0].role_id).role_name;
+            
+            return temp;
         });
+
+        setEmployees(finalData);
+
     }
 
-    const tableData = customers.map(item => {
+    const tableData = employees.map(item => {
         return <tr>
-            <td>{item.name}</td>
-            <td>{item.phone}</td>
-            <td>{item.email}</td>
-            <td>{item.address}</td>
-            <td><button onClick={() => handleUpdate(item.cId)} style={{ width: "150px", margin: "10px" }}>Edit Customer</button>
-                <button onClick={() => handleDelete(item.cId)} style={{ width: "150px", margin: "10px" }}>Delete Customer</button></td>
+            <td>{item.user_name}</td>
+            <td>{item.password}</td>
+            <td>{item.role}</td>
+            <td><button onClick={() => handleUpdate(item.cId)} style={{ width: "150px", margin: "10px" }}>Edit Employee</button>
+                <button onClick={() => handleDelete(item.cId)} style={{ width: "150px", margin: "10px" }}>Delete Employee</button></td>
         </tr>
     });
 
     return (
         <div>
-            <h2>Customers</h2>
+            <h2>Employees</h2>
             <hr />
             <button onClick={() => handleAdd()} style={{ width: "150px", margin: "20px" }} >Add Product</button>
             <table className="customers">
                 <tr>
                     <th>Name</th>
-                    <th>Phone</th>
-                    <th>Email</th>
-                    <th>Address</th>
+                    <th>Password</th>
+                    <th>Role</th>
                     <th>Actions</th>
                 </tr>
                 {tableData}
@@ -115,10 +131,10 @@ const Customers = () => {
 
             <div class="formContainer" style={{ display: displayDetails }}>
                 <div class="leftSide">
-                    <h2 class="formHeader">Customer Details</h2>
+                    <h2 class="formHeader">Employee Details</h2>
                     <div class="formContentContainer">
                         
-                            {customerDetails}
+                            {employeeDetails}
                             
                     </div>
                 </div>
@@ -132,7 +148,7 @@ const Customers = () => {
 
 }
 
-export default Customers;
+export default Employees;
 
 const validateRequired = (value) => !!value.length;
 const validateEmail = (email) =>

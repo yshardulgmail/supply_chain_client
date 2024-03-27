@@ -7,6 +7,7 @@ import ShowActions from "./ShowActions";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Outlet, Link } from "react-router-dom";
 import Customers from "./Customers";
+import Employees from "./Employees";
 
 function AdminPage(props) {
 	const { role } = props;
@@ -19,6 +20,7 @@ function AdminPage(props) {
 						<Route index element={<ShowActions role={role} />} />
 						<Route path="actions" element={<ShowActions />} />
 						<Route path="customers" element={<Customers />} />
+						<Route path="employees" element={<Employees />} />
 						{/* <Route path="addProduct" element={<AddProduct />} />
 						<Route path="updateProduct" element={<UpdateProduct />} /> */}
 					</Route>

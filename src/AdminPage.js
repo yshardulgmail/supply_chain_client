@@ -6,6 +6,7 @@ import ShowActions from "./ShowActions";
 // import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Outlet, Link } from "react-router-dom";
+import Customers from "./Customers";
 
 function AdminPage(props) {
 	const { role } = props;
@@ -15,9 +16,10 @@ function AdminPage(props) {
 			<BrowserRouter>
 				<Routes>
 					<Route path="/" element={<AdminLayout />}>
-						<Route index element={<ShowActions />} />
-						{/* <Route path="actions" element={<AddProduct />} />
-						<Route path="addProduct" element={<AddProduct />} />
+						<Route index element={<ShowActions role={role} />} />
+						<Route path="actions" element={<ShowActions />} />
+						<Route path="customers" element={<Customers />} />
+						{/* <Route path="addProduct" element={<AddProduct />} />
 						<Route path="updateProduct" element={<UpdateProduct />} /> */}
 					</Route>
 				</Routes>

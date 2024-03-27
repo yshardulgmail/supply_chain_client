@@ -1,0 +1,3 @@
+npm install react-router-dom
+npm install -S @mui/material @emotion/react @emotion/styled
+npm install -S material-react-table
